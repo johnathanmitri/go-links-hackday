@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 
-// convert kilobytes to a string, that has them in units of KB, MB, or GB appropriately.
-function formatSize(numKilobytes) {
-    if (numKilobytes < 1024)
-      return `${numKilobytes}KB`;
-    else if (numKilobytes < 1024 * 1024) {
-      const megabytes = (numKilobytes / 1024).toFixed(2);
+// convert bytes to a string, that has them in units of KB, MB, or GB appropriately.
+function formatSize(numBytes) {
+    if (numBytes < 1024)
+      return `${numBytes}B`;
+    else if (numBytes < 1024 * 1024) {
+      const kilobytes = (numBytes / 1024).toFixed(2);
+      return `${kilobytes}KB`;
+    }
+    else if (numBytes < 1024 * 1024 * 1024) {
+      const megabytes = (numBytes / (1024 * 1024)).toFixed(2);
       return `${megabytes}MB`;
     }
     else {
-      const gigabytes = (numKilobytes / (1024 * 1024)).toFixed(2);
+      const gigabytes = (numBytes / (1024 * 1024 * 1024)).toFixed(2);
       return `${gigabytes}GB`;
     }
-}
+  }
 
 function Stat({title, info}) {
     return (
@@ -46,7 +50,7 @@ function StatsView({stats}) {
                 <Stat title="Total Repositories" info={stats.total_repositories} />
                 <Stat title="Total Forks" info={stats.total_forks} />
                 <Stat title="Total Stars" info={stats.total_stars} />
-                <Stat title="Average Repo Size" info={formatSize(stats.average_repo_size_kb)} />
+                <Stat title="Average Repo Size" info={formatSize(stats.average_repo_size_kb*1024)} />
 
                 <LanguagesView sortedLanguageArray={stats.language_bytes} totalBytesOfCode={stats.total_bytes_of_code}/>
             </div>
